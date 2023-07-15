@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".controller.HomeActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Lista de Pedidos"
+                android:textStyle="bold|italic"
+                android:textSize="35sp"
+                android:textColor="@color/black"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvOrders"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btFinishedOrders"
+                android:layout_width="170dp"
+                android:layout_height="60dp"
+                android:layout_gravity="end|bottom"
+                android:backgroundTint="@color/black"
+                android:src="@android:drawable/ic_input_add"
+                android:text="Pedidos Concluídos"
+                android:textColor="@color/white"
+                android:textStyle="bold|italic" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btAddOrder"
+                android:layout_width="170dp"
+                android:layout_height="60dp"
+                android:layout_gravity="end|bottom"
+                android:backgroundTint="@color/dark_red"
+                android:src="@android:drawable/ic_input_add"
+                app:tint="@android:color/white"
+                android:text="Adicionar Pizza"
+                android:textColor="@color/white"
+                android:textStyle="bold|italic" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

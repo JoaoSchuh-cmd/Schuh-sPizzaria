@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controller.FinishOrderActivity"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Finalizar Pedido"
+                android:textStyle="bold|italic"
+                android:textSize="35sp"
+                android:textColor="@color/black"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvOrderPizzasList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_gravity="center|bottom">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btAddPizza"
+                android:layout_width="170dp"
+                android:layout_height="60dp"
+                android:backgroundTint="@color/dark_red"
+                android:src="@android:drawable/ic_input_add"
+                android:text="Adicionar Pizza"
+                android:textColor="@color/white"
+                android:textStyle="bold|italic" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btCancel"
+                    android:layout_width="170dp"
+                    android:layout_height="60dp"
+                    android:backgroundTint="@color/black"
+                    android:src="@android:drawable/ic_input_add"
+                    android:text="Cancelar"
+                    android:textColor="@color/white"
+                    android:textStyle="bold|italic" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btFinishOrder"
+                    android:layout_width="170dp"
+                    android:layout_height="60dp"
+                    android:backgroundTint="@color/green"
+                    android:src="@android:drawable/ic_input_add"
+                    android:text="Concluir Pedido"
+                    android:textColor="@color/white"
+                    android:textStyle="bold|italic" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".controller.OrderActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Monte sua Pizza"
+                    android:textStyle="bold|italic"
+                    android:textSize="35sp"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Selecione um tamanho:"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:textStyle="italic"/>
+                <RadioGroup
+                    android:id="@+id/rgPizzaSize"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rbSmallSize"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Pequena"
+                        android:textSize="20sp"
+                        android:textStyle="bold|italic"
+                        android:checked="true"
+                        android:buttonTint="@color/dark_red"/>
+
+                    <RadioButton
+                        android:id="@+id/rbMediumSize"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Média"
+                        android:textSize="20sp"
+                        android:textStyle="bold|italic"
+                        android:textColor="@color/black"
+                        android:buttonTint="@color/dark_red" />
+
+                    <RadioButton
+                        android:id="@+id/rbLargeSize"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Grande"
+                        android:textSize="20sp"
+                        android:textStyle="bold|italic"
+                        android:textColor="@color/black"
+                        android:backgroundTint="@color/dark_red"/>
+
+                </RadioGroup>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Deseja borda?"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:textStyle="italic"/>
+                <RadioGroup
+                    android:id="@+id/rgPizzaBorder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rbWithEdge"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Sim"
+                        android:textSize="20sp"
+                        android:textStyle="bold|italic"
+                        android:textColor="@color/black"
+                        android:checked="true"
+                        android:drawableTint="@color/dark_red"/>
+
+                    <RadioButton
+                        android:id="@+id/rbNoEdge"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Não"
+                        android:textSize="20sp"
+                        android:textStyle="bold|italic"
+                        android:textColor="@color/black"
+                        android:backgroundTint="@color/dark_red"/>
+
+                </RadioGroup>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/selecione_qtd_sabores_text"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:textStyle="italic"/>
+                <CheckBox
+                    android:id="@+id/cbChicken"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Frango"
+                    android:textSize="20sp"
+                    android:textStyle="bold|italic"/>
+                <CheckBox
+                    android:id="@+id/cbChickenWithCatupiry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Franco c/ Catupiry"
+                    android:textSize="20sp"
+                    android:textStyle="bold|italic"/>
+                <CheckBox
+                    android:id="@+id/cbPortuguese"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Portuquesa"
+                    android:textSize="20sp"
+                    android:textStyle="bold|italic"/>
+                <CheckBox
+                    android:id="@+id/cbPepperoni"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Calabresa"
+                    android:textSize="20sp"
+                    android:textStyle="bold|italic"/>
+                <CheckBox
+                    android:id="@+id/cbStrogonoff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Strogonoff"
+                    android:textSize="20sp"
+                    android:textStyle="bold|italic"/>
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="10dp"
+            android:layout_gravity="bottom">
+
+            <Button
+                android:id="@+id/btCancel"
+                android:layout_width="150dp"
+                android:layout_height="60dp"
+                android:text="Cancelar"
+                android:textSize="20dp"
+                android:textStyle="bold|italic"
+                android:backgroundTint="@color/black"
+                android:layout_marginRight="10dp"/>
+
+            <Button
+                android:id="@+id/btSave"
+                android:layout_width="150dp"
+                android:layout_height="60dp"
+                android:text="Avançar"
+                android:textSize="20dp"
+                android:textStyle="bold|italic"
+                android:backgroundTint="@color/dark_red"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+
+</LinearLayout>

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SchuhsPizzaria</string>
+    <string name="selecione_qtd_sabores_text">Selecione até X sabores:</string>
+</resources>
