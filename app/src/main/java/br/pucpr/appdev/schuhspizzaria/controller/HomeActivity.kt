@@ -53,7 +53,7 @@ class HomeActivity : AppCompatActivity() {
         LinearLayoutManager(this).apply {
             this.orientation = LinearLayoutManager.VERTICAL
             binding.rvOrders.layoutManager = this
-            adapter = OrderAdapter(OrderDao.getInstance(this@HomeActivity).getAll()).apply {
+            adapter = OrderAdapter(OrderDao.getInstance(this@HomeActivity).getAllInPreparationOrders()).apply {
                 binding.rvOrders.adapter = this
             }
         }

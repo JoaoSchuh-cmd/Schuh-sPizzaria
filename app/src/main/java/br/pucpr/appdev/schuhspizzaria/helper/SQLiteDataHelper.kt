@@ -31,6 +31,13 @@ class SQLiteDataHelper(context: Context) :
                 "PRICE DOUBLE," +
                 "STATUS INTEGER" +
                 ")"
+
+        private const val insertOrderSQL = "INSERT INTO $TABLE_ORDERS (DATE, PRICE, STATUS) VALUES" +
+                "('15/07/2023', 90.00, 0)"
+
+        private const val insertPizzaSQL = "INSERT INTO $TABLE_PIZZAS (SIZE, FLAVORS, EDGE, PRICE, ORDER_ID) VALUES" +
+                "('GRANDE', 'Flango|Calapresa|Estrágunoss', 1, 45.00, 1)," +
+                "('GRANDE', 'Flango|Calapresa|Dos Colonizadores', 1, 45.00, 1)"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -40,6 +47,8 @@ class SQLiteDataHelper(context: Context) :
         try {
             db.execSQL(createPizzaSQL)
             db.execSQL(createOrderSQL)
+            db.execSQL(insertOrderSQL)
+            db.execSQL(insertPizzaSQL)
             db.setTransactionSuccessful()
         } catch (e: Exception) {
             Log.d("ShuzinsPizzariaApp", e.localizedMessage)

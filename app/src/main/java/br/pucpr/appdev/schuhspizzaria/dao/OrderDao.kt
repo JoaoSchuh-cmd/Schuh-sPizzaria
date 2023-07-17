@@ -67,6 +67,37 @@ class OrderDao private constructor(
         return orders
     }
 
+    fun getAllInPreparationOrders() : MutableList<Order> {
+        val db = helper.readableDatabase
+        var orders = mutableListOf<Order>()
+
+        val cursor = db.query(
+            tableName,
+            columns,
+            "$FIELD_STATUS = ?",
+            arrayOf("1"),
+            null,
+            null,
+            FIELD_ID
+        )
+
+        with(cursor) {
+            if (moveToNext()) {
+                val id = getLong(getColumnIndexOrThrow(FIELD_ID))
+                val status = getInt(getColumnIndexOrThrow(FIELD_STATUS))
+                val date = getString(getColumnIndexOrThrow(FIELD_DATE))
+                val price = getDouble(getColumnIndexOrThrow(FIELD_PRICE))
+
+                val order = Order(price, status, date)
+                order.id = id
+
+                orders.add(order)
+            }
+        }
+
+        return orders
+    }
+
     fun getAllCompletedOrders() : MutableList<Order> {
         val db = helper.readableDatabase
         var orders = mutableListOf<Order>()
