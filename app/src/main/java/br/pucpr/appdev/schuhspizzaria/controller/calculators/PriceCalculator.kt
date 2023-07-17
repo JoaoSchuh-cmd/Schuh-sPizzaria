@@ -8,4 +8,12 @@ object PriceCalculator {
     fun getOrderPrice() : Double {
         return OrderPriceCalculator.price
     }
+
+    fun clearPizzaPrice() {
+        PizzaPriceCalculator.price = 0.00
+    }
+
+    fun clearOrderPrice() {
+        OrderPriceCalculator.price = 0.00
+    }
 }

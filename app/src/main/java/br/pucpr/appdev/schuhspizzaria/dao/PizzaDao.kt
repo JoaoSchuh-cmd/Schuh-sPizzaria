@@ -171,7 +171,7 @@ class PizzaDao private constructor(
         try {
             count = db.insert(
                 tableName,
-                FIELD_ID,
+                null,
                 values
             )
             db.setTransactionSuccessful()

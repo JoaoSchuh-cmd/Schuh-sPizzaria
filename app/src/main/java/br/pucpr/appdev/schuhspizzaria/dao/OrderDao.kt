@@ -33,7 +33,7 @@ class OrderDao private constructor(
     val FIELD_STATUS = "STATUS"
     val FIELD_DATE = "DATE"
 
-    val columns = arrayOf(FIELD_PRICE, FIELD_STATUS, FIELD_DATE)
+    val columns = arrayOf(FIELD_ID, FIELD_PRICE, FIELD_STATUS, FIELD_DATE)
 
     val tableName = "ORDER_TABLE"
 
@@ -53,10 +53,10 @@ class OrderDao private constructor(
 
         with(cursor) {
             while (moveToNext()) {
-                val id = getColumnIndexOrThrow(FIELD_ID).toLong()
-                val price = getColumnIndexOrThrow(FIELD_PRICE).toDouble()
-                val status = getColumnIndexOrThrow(FIELD_STATUS)
-                val date = getColumnIndexOrThrow(FIELD_DATE).toString()
+                val id = getLong(getColumnIndexOrThrow(FIELD_ID))
+                val price = getDouble(getColumnIndexOrThrow(FIELD_PRICE))
+                val status = getInt(getColumnIndexOrThrow(FIELD_STATUS))
+                val date = getString(getColumnIndexOrThrow(FIELD_DATE))
 
                 var order = Order(price, status, date)
                 order.id = id
@@ -160,7 +160,7 @@ class OrderDao private constructor(
         try {
             count = db.insert(
                 tableName,
-                FIELD_ID,
+                null,
                 values
             )
             db.setTransactionSuccessful()

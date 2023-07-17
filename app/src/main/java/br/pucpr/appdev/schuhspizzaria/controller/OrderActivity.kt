@@ -13,27 +13,16 @@ import br.pucpr.appdev.schuhspizzaria.model.Flavor
 import br.pucpr.appdev.schuhspizzaria.builder.flavorbuilder.PepperoniFlavor
 import br.pucpr.appdev.schuhspizzaria.builder.flavorbuilder.PortugueseFlavor
 import br.pucpr.appdev.schuhspizzaria.builder.flavorbuilder.StrogonoffFlavor
+import br.pucpr.appdev.schuhspizzaria.controller.calculators.OrderPriceCalculator
 import br.pucpr.appdev.schuhspizzaria.controller.calculators.PizzaPriceCalculator
 import br.pucpr.appdev.schuhspizzaria.controller.calculators.PriceCalculator
 import br.pucpr.appdev.schuhspizzaria.dao.OrderDao
 import br.pucpr.appdev.schuhspizzaria.datastore.OrderDataStore
-import br.pucpr.appdev.schuhspizzaria.view.OrderAdapter
+import br.pucpr.appdev.schuhspizzaria.view.PizzaAdapter
 
 class OrderActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityOrderBinding
-    private lateinit var adapter: OrderAdapter
-
-    private val addPizzaForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            result.data?.let {
-                    intent ->
-                Toast.makeText(this, "Ordem adicionada com sucesso!!!", Toast.LENGTH_LONG).show()
-                adapter.notifyDataSetChanged()
-            }
-            adapter.notifyDataSetChanged()
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,10 +37,19 @@ class OrderActivity : AppCompatActivity() {
         binding.btSave.setOnClickListener {
             addPizzaToOrder()
 
-            Intent(this, OrderActivity::class.java).run {
-                addPizzaForResult.launch(this)
+            Intent(this, FinishOrderActivity::class.java).run {
+                setResult(RESULT_OK)
+                startActivity(this)
             }
+
+            finish()
         }
+    }
+
+    private fun isFinishOrderActivityStarted(): Boolean {
+        val intent = Intent(this, FinishOrderActivity::class.java)
+        val componentName = intent.resolveActivity(packageManager)
+        return componentName != null && componentName.packageName == packageName && !isFinishing
     }
 
     fun configureBtCancel() {
@@ -83,7 +81,11 @@ class OrderActivity : AppCompatActivity() {
 
         val price = PriceCalculator.getPizzaPrice()
 
+        OrderPriceCalculator.incOrderPrice(price)
+
         OrderDataStore.addPizza(Pizza(size, flavors, withEdge, price,getLastOrderId() + 1))
+
+        PriceCalculator.clearPizzaPrice()
     }
 
     fun flavorsBuild() : String {

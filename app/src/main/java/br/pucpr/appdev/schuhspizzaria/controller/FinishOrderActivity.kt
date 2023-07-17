@@ -6,12 +6,15 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
+import br.pucpr.appdev.schuhspizzaria.controller.calculators.OrderPriceCalculator
+import br.pucpr.appdev.schuhspizzaria.controller.calculators.PriceCalculator
 import br.pucpr.appdev.schuhspizzaria.dao.OrderDao
 import br.pucpr.appdev.schuhspizzaria.dao.PizzaDao
 import br.pucpr.appdev.schuhspizzaria.databinding.ActivityFinishOrderBinding
 import br.pucpr.appdev.schuhspizzaria.datastore.OrderDataStore
 import br.pucpr.appdev.schuhspizzaria.model.Order
 import br.pucpr.appdev.schuhspizzaria.shared.Functions
+import br.pucpr.appdev.schuhspizzaria.view.OrderAdapter
 import br.pucpr.appdev.schuhspizzaria.view.PizzaAdapter
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -37,6 +40,7 @@ class FinishOrderActivity : AppCompatActivity() {
         binding = ActivityFinishOrderBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        loadRecycleView()
         configureBtAddPizza()
         configureBtFinishOrder()
         configureBtCancel()
@@ -45,21 +49,23 @@ class FinishOrderActivity : AppCompatActivity() {
     fun finishOrderBuilding() {
         buildAndSaveOrder()
         persistPizzas()
+        OrderDataStore.clearOrder()
+        PriceCalculator.clearOrderPrice()
     }
 
     fun buildAndSaveOrder() {
-        val date = SimpleDateFormat("dd/mm/yyyy").format(Date())
+        val date = SimpleDateFormat("dd/MM/yyyy").format(Date())
 
-        val order = Order(0.00, 1, date)
+        val order = Order(PriceCalculator.getOrderPrice(), 1, date)
 
-        OrderDao.getInstance(applicationContext).add(order)
+        OrderDao.getInstance(this).add(order)
     }
 
     fun persistPizzas() {
         val pizzas = OrderDataStore.getOrderPizzas()
 
         for (pizza in pizzas) {
-            PizzaDao.getInstance(applicationContext).add(pizza)
+            PizzaDao.getInstance(this).add(pizza)
         }
     }
 
@@ -68,11 +74,16 @@ class FinishOrderActivity : AppCompatActivity() {
             this.orientation = LinearLayoutManager.VERTICAL
             binding.rvOrderPizzasList.layoutManager = this
 
-            adapter = PizzaAdapter(PizzaDao.getInstance(applicationContext).getAll()).apply {
+            adapter = PizzaAdapter(PizzaDao.getInstance(this@FinishOrderActivity).getAll()).apply {
                 binding.rvOrderPizzasList.adapter = this
             }
         }
     }
+
+
+
+
+    // ************** SETTINGS *************
 
     private fun configureBtAddPizza() {
         binding.btAddPizza.setOnClickListener {
@@ -81,12 +92,11 @@ class FinishOrderActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun configureBtFinishOrder() {
         binding.btFinishOrder.setOnClickListener {
             finishOrderBuilding()
             Intent().run {
-                setResult(RESULT_OK)
+                setResult(RESULT_OK, this)
             }
             finish()
         }
@@ -94,13 +104,27 @@ class FinishOrderActivity : AppCompatActivity() {
 
     private fun configureBtCancel() {
         binding.btCancel.setOnClickListener {
-            Functions.showConfirmationDialog(applicationContext, "Tem certeza de que deseja cancelar o pedido? \n Você voltará para a página inicial!")
+            Functions.showConfirmationDialog(this, "Tem certeza de que deseja cancelar o pedido? \n Você voltará para a página inicial!")
                 .thenAccept { result ->
                     if (result) {
+                        Intent().run {
+                            setResult(RESULT_CANCELED)
+                        }
                         OrderDataStore.clearOrder()
                         finish()
                     }
                 }
         }
     }
+
+    private fun loadRecycleView() {
+        LinearLayoutManager(this).apply {
+            this.orientation = LinearLayoutManager.VERTICAL
+            binding.rvOrderPizzasList.layoutManager = this
+            adapter = PizzaAdapter(OrderDataStore.getOrderPizzas()).apply {
+                binding.rvOrderPizzasList.adapter = this
+            }
+        }
+    }
+
 }

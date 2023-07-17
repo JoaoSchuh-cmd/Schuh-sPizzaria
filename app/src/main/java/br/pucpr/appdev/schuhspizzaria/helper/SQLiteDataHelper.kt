@@ -16,7 +16,7 @@ class SQLiteDataHelper(context: Context) :
         private const val TABLE_PIZZAS = "PIZZA"
         private const val TABLE_ORDERS = "ORDER_TABLE"
 
-        private const val createPizzaSQL = "CREATE TABLE $TABLE_PIZZAS(" +
+        private const val createPizzaSQL = "CREATE TABLE IF NOT EXISTS $TABLE_PIZZAS(" +
                 "$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "SIZE VARCHAR(10) NOT NULL," +
                 "FLAVORS VARCHAR(50) NOT NULL," +
@@ -25,7 +25,7 @@ class SQLiteDataHelper(context: Context) :
                 "ORDER_ID INTEGER NOT NULL" +
                 ")"
 
-        private const val createOrderSQL = "CREATE TABLE $TABLE_ORDERS(" +
+        private const val createOrderSQL = "CREATE TABLE IF NOT EXISTS $TABLE_ORDERS(" +
                 "$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "DATE VARCHAR(10)," +
                 "PRICE DOUBLE," +
@@ -38,8 +38,9 @@ class SQLiteDataHelper(context: Context) :
 
         db.beginTransaction()
         try {
-            db?.execSQL(createPizzaSQL)
-            db?.execSQL(createOrderSQL)
+            db.execSQL(createPizzaSQL)
+            db.execSQL(createOrderSQL)
+            db.setTransactionSuccessful()
         } catch (e: Exception) {
             Log.d("ShuzinsPizzariaApp", e.localizedMessage)
         } finally {
@@ -47,7 +48,19 @@ class SQLiteDataHelper(context: Context) :
         }
     }
 
-    override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
+    override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
+        val db = db ?: return
 
+        db.beginTransaction()
+        try {
+            db.execSQL("DROP TABLE IF EXISTS $TABLE_PIZZAS")
+            db.execSQL("DROP TABLE IF EXISTS $TABLE_ORDERS")
+            onCreate(db)
+            db.setTransactionSuccessful()
+        } catch (e: Exception) {
+            Log.d("SchuzinsPizzariaApp", e.localizedMessage)
+        } finally {
+            db.endTransaction()
+        }
     }
 }

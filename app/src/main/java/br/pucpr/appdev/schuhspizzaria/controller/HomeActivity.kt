@@ -17,12 +17,9 @@ class HomeActivity : AppCompatActivity() {
 
     private val addOrderForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
-            result.data?.let {
-                    intent ->
-                Toast.makeText(this, "Pedido adicionado com sucesso!!!", Toast.LENGTH_LONG).show()
-                adapter.notifyDataSetChanged()
-            }
+            Toast.makeText(this, "Pedido adicionado com sucesso!!!", Toast.LENGTH_LONG).show()
             adapter.notifyDataSetChanged()
+            updateOrderList()
         }
     }
 
@@ -40,7 +37,7 @@ class HomeActivity : AppCompatActivity() {
             this.orientation = LinearLayoutManager.VERTICAL
             binding.rvOrders.layoutManager = this
 
-            adapter = OrderAdapter(OrderDao.getInstance(applicationContext).getAll()).apply {
+            adapter = OrderAdapter(OrderDao.getInstance(this@HomeActivity).getAll()).apply {
                 binding.rvOrders.adapter = this
             }
         }
