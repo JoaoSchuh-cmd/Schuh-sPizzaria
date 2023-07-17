@@ -3,19 +3,19 @@ package br.pucpr.appdev.schuhspizzaria.view
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import br.pucpr.appdev.schuhspizzaria.databinding.ItemOrderBinding
+import br.pucpr.appdev.schuhspizzaria.databinding.ItemCompletedOrderBinding
 import br.pucpr.appdev.schuhspizzaria.model.Order
 
-class OrderAdapter(var orders: MutableList<Order>) : RecyclerView.Adapter<OrderAdapter.OrderHolder>() {
+class CompletedOrderAdapter(var orders: MutableList<Order>) : RecyclerView.Adapter<CompletedOrderAdapter.CompletedOrderHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderHolder {
-        ItemOrderBinding.inflate(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompletedOrderHolder {
+        ItemCompletedOrderBinding.inflate(
             LayoutInflater.from(parent.context), parent, false).apply {
-            return OrderHolder(this)
+            return CompletedOrderHolder(this)
         }
     }
 
-    override fun onBindViewHolder(holder: OrderHolder, position: Int) {
+    override fun onBindViewHolder(holder: CompletedOrderHolder, position: Int) {
         orders[position].apply {
             holder.binding.tvOrderId.text = this.id.toString() + "#"
             holder.binding.tvOrderDate.text = this.date
@@ -26,5 +26,5 @@ class OrderAdapter(var orders: MutableList<Order>) : RecyclerView.Adapter<OrderA
 
     override fun getItemCount() = orders.size
 
-    inner class OrderHolder(var binding: ItemOrderBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class CompletedOrderHolder(var binding: ItemCompletedOrderBinding) : RecyclerView.ViewHolder(binding.root)
 }

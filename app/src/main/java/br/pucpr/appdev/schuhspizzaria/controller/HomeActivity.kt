@@ -19,7 +19,7 @@ class HomeActivity : AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             Toast.makeText(this, "Pedido adicionado com sucesso!!!", Toast.LENGTH_LONG).show()
             adapter.notifyDataSetChanged()
-            updateOrderList()
+            loadRecycleView()
         }
     }
 
@@ -28,25 +28,33 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        updateOrderList()
+        loadRecycleView()
         configureBtAddOrder()
+        configureBtFinishedOrders()
     }
 
-    private fun updateOrderList() {
-        LinearLayoutManager(this).apply {
-            this.orientation = LinearLayoutManager.VERTICAL
-            binding.rvOrders.layoutManager = this
-
-            adapter = OrderAdapter(OrderDao.getInstance(this@HomeActivity).getAll()).apply {
-                binding.rvOrders.adapter = this
-            }
-        }
-    }
 
     private fun configureBtAddOrder() {
         binding.btAddOrder.setOnClickListener {
             Intent(this, OrderActivity::class.java).run {
                 addOrderForResult.launch(this)
+            }
+        }
+    }
+
+    private fun configureBtFinishedOrders() {
+        binding.btFinishedOrders.setOnClickListener {
+            val intent = Intent(this, CompletedOrdersActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun loadRecycleView() {
+        LinearLayoutManager(this).apply {
+            this.orientation = LinearLayoutManager.VERTICAL
+            binding.rvOrders.layoutManager = this
+            adapter = OrderAdapter(OrderDao.getInstance(this@HomeActivity).getAll()).apply {
+                binding.rvOrders.adapter = this
             }
         }
     }
