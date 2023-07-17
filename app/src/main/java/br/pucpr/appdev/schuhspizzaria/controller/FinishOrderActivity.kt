@@ -90,6 +90,7 @@ class FinishOrderActivity : AppCompatActivity() {
             Intent(this, OrderActivity::class.java).run {
                 addPizzaForResult.launch(this)
             }
+            finish()
         }
     }
     private fun configureBtFinishOrder() {
