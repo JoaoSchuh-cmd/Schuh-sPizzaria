@@ -1,10 +1,10 @@
 package br.pucpr.appdev.schuhspizzaria.controller
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import br.pucpr.appdev.schuhspizzaria.databinding.ActivityOrderBinding
 import br.pucpr.appdev.schuhspizzaria.model.Pizza
 import br.pucpr.appdev.schuhspizzaria.builder.flavorbuilder.ChickenFlavor
@@ -17,8 +17,9 @@ import br.pucpr.appdev.schuhspizzaria.controller.calculators.OrderPriceCalculato
 import br.pucpr.appdev.schuhspizzaria.controller.calculators.PizzaPriceCalculator
 import br.pucpr.appdev.schuhspizzaria.controller.calculators.PriceCalculator
 import br.pucpr.appdev.schuhspizzaria.dao.OrderDao
+import br.pucpr.appdev.schuhspizzaria.dao.PizzaDao
 import br.pucpr.appdev.schuhspizzaria.datastore.OrderDataStore
-import br.pucpr.appdev.schuhspizzaria.view.PizzaAdapter
+import br.pucpr.appdev.schuhspizzaria.model.Order
 
 class OrderActivity : AppCompatActivity() {
 
@@ -31,11 +32,12 @@ class OrderActivity : AppCompatActivity() {
 
         configureBtSave()
         configureBtCancel()
+        loadDataFromOuter()
     }
 
     fun configureBtSave() {
         binding.btSave.setOnClickListener {
-            addPizzaToOrder()
+            addOrEditPizzaToOrder()
 
             Intent(this, FinishOrderActivity::class.java).run {
                 setResult(RESULT_OK)
@@ -46,19 +48,27 @@ class OrderActivity : AppCompatActivity() {
         }
     }
 
-    private fun isFinishOrderActivityStarted(): Boolean {
-        val intent = Intent(this, FinishOrderActivity::class.java)
-        val componentName = intent.resolveActivity(packageManager)
-        return componentName != null && componentName.packageName == packageName && !isFinishing
-    }
-
     fun configureBtCancel() {
         binding.btCancel.setOnClickListener {
+            if (!OrderDataStore.isEmpty())
+                Intent(this, FinishOrderActivity::class.java).run {
+                    setResult(RESULT_CANCELED)
+                    startActivity(this)
+                }
             finish()
         }
     }
 
-    fun addPizzaToOrder() {
+    fun addOrEditPizzaToOrder() {
+        if (intent.getIntExtra("editingPizza", -1) == -1)
+            OrderDataStore.addPizza(buildPizza())
+        else
+            OrderDataStore.updatePizza(buildPizza(), intent.getIntExtra("pizzaPos", -1))
+
+        PriceCalculator.clearPizzaPrice()
+    }
+
+    fun buildPizza() : Pizza {
         val size =
             when (binding.rgPizzaSize.checkedRadioButtonId) {
                 binding.rbSmallSize.id -> "PEQUENA"
@@ -69,9 +79,9 @@ class OrderActivity : AppCompatActivity() {
 
         val withEdge =
             when (binding.rgPizzaBorder.checkedRadioButtonId) {
-              binding.rbWithEdge.id -> true
-              binding.rbNoEdge.id -> false
-              else -> false
+                binding.rbWithEdge.id -> true
+                binding.rbNoEdge.id -> false
+                else -> false
             }
 
         val flavors = flavorsBuild() // Aqui ja calcula o preço pelos sabores também
@@ -83,9 +93,7 @@ class OrderActivity : AppCompatActivity() {
 
         OrderPriceCalculator.incOrderPrice(price)
 
-        OrderDataStore.addPizza(Pizza(size, flavors, withEdge, price,getLastOrderId() + 1))
-
-        PriceCalculator.clearPizzaPrice()
+        return Pizza(size, flavors, withEdge, price,getLastOrderId() + 1)
     }
 
     fun flavorsBuild() : String {
@@ -119,6 +127,59 @@ class OrderActivity : AppCompatActivity() {
     }
 
     fun getLastOrderId() : Long {
-        return OrderDao.getInstance(applicationContext).getLastId()
+        return OrderDao.getInstance(this).getLastId()
+    }
+
+    private fun loadDataFromOuter() {
+        val pizzaId = intent.getLongExtra("pizzaId", -1)
+        val pizzaPos = intent.getIntExtra("pizzaPos", -1)
+
+        var pizza = Pizza()
+
+        if (pizzaId.toInt() != -1)
+            pizza = PizzaDao.getInstance(this).getById(pizzaId)
+        else if (pizzaPos != -1)
+            pizza = OrderDataStore.getOrderPizzaByPosition(pizzaPos)
+
+        if (pizza.flavors.isNotEmpty()) {
+            loadSize(pizza.size)
+            loadWithEdge(pizza.withEdge)
+            loadFlavors(pizza.flavors)
+        }
+    }
+
+    private fun loadSize(size: String) {
+        var id = 0
+        when (size) {
+            "PEQUENA" -> id = binding.rbSmallSize.id
+            "MÉDIA" -> id = binding.rbMediumSize.id
+            "GRANDE" -> id = binding.rbLargeSize.id
+        }
+        binding.rgPizzaSize.check(id)
+    }
+
+    private fun loadWithEdge(withEdge: Boolean) {
+        val id = if (withEdge) binding.rbWithEdge.id else binding.rbNoEdge.id
+        binding.rgPizzaBorder.check(id)
+    }
+
+    private fun loadFlavors(flavors: String) {
+        val flavorsList = flavors.split("|")
+
+        if (flavorsList.isNotEmpty())
+            for (flavor in flavorsList)
+                checkFlavor(flavor)
+        else
+            checkFlavor(flavors)
+    }
+
+    private fun checkFlavor(flavor : String) {
+        when (flavor) {
+            "Frango" -> binding.cbChicken.isChecked = true
+            "Frango com Catupiri" -> binding.cbChickenWithCatupiry.isChecked = true
+            "Calabresa" -> binding.cbPepperoni.isChecked = true
+            "Portuguesa" -> binding.cbPortuguese.isChecked = true
+            "Strononoff" -> binding.cbStrogonoff.isChecked = true
+        }
     }
 }

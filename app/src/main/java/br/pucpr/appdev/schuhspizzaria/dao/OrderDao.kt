@@ -82,7 +82,7 @@ class OrderDao private constructor(
         )
 
         with(cursor) {
-            if (moveToNext()) {
+            while (moveToNext()) {
                 val id = getLong(getColumnIndexOrThrow(FIELD_ID))
                 val status = getInt(getColumnIndexOrThrow(FIELD_STATUS))
                 val date = getString(getColumnIndexOrThrow(FIELD_DATE))
@@ -136,8 +136,8 @@ class OrderDao private constructor(
         val cursor = db.query(
             tableName,
             columns,
-            "FIELD_ID = ?",
-            arrayOf(FIELD_ID),
+            "${FIELD_ID} = ?",
+            arrayOf(id.toString()),
             null,
             null,
             null
@@ -246,11 +246,11 @@ class OrderDao private constructor(
             null,
             null,
             null,
-            FIELD_ID
+           "${FIELD_ID} DESC"
         )
 
-        if (cursor.count > 0)
-            id = cursor.getColumnIndexOrThrow(FIELD_ID).toLong()
+        if (cursor.moveToFirst())
+            id = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_ID))
 
         return id
     }

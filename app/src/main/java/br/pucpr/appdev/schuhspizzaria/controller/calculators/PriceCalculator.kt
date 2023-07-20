@@ -16,4 +16,9 @@ object PriceCalculator {
     fun clearOrderPrice() {
         OrderPriceCalculator.price = 0.00
     }
+
+    fun clearPrices() {
+        clearOrderPrice()
+        clearPizzaPrice()
+    }
 }

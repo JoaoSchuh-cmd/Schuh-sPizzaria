@@ -9,6 +9,10 @@ object OrderDataStore {
         pizzaList.add(pizza)
     }
 
+    fun updatePizza(newPizza: Pizza, position: Int) {
+        pizzaList[position] = newPizza
+    }
+
     fun removePizza(pizza: Pizza) {
         pizzaList.remove(pizza)
     }
@@ -19,5 +23,12 @@ object OrderDataStore {
 
     fun getOrderPizzas(): MutableList<Pizza> {
         return pizzaList
+    }
+
+    fun getOrderPizzaByPosition(position: Int) : Pizza {
+        return pizzaList[position]
+    }
+    fun isEmpty() : Boolean {
+        return pizzaList.isEmpty()
     }
 }

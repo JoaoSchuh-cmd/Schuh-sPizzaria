@@ -51,7 +51,8 @@
                 android:src="@android:drawable/ic_input_add"
                 android:text="Pedidos Concluídos"
                 android:textColor="@color/white"
-                android:textStyle="bold|italic" />
+                android:textStyle="bold|italic"
+                android:visibility="gone"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btAddOrder"

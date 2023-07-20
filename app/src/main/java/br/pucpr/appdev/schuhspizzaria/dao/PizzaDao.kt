@@ -72,6 +72,41 @@ class PizzaDao private constructor(
         return pizzas
     }
 
+    fun getAllPizzaFromOrderId(orderId: Long) : MutableList<Pizza> {
+        val db = helper.readableDatabase
+        var pizza = Pizza()
+        var pizzas = mutableListOf<Pizza>()
+
+        val cursor = db.query(
+            tableName,
+            columns,
+            "$FIELD_ORDER_ID = ?",
+            arrayOf(orderId.toString()),
+            null,
+            null,
+            null
+        )
+
+        with(cursor) {
+            while (cursor.moveToNext()) {
+                val id = getLong(getColumnIndexOrThrow(FIELD_ID))
+                val size = getString(getColumnIndexOrThrow(FIELD_SIZE))
+                val flavors = getString(getColumnIndexOrThrow(FIELD_FLAVORS))
+                val edge = getInt(getColumnIndexOrThrow(FIELD_EDGE))
+                val price = getDouble(getColumnIndexOrThrow(FIELD_PRICE))
+                val orderId = getLong(getColumnIndexOrThrow(FIELD_ORDER_ID))
+
+                val withEdge = edge != 0
+
+                pizza = Pizza(size, flavors, withEdge, price, orderId)
+                pizza.id = id
+                pizzas.add(pizza)
+            }
+        }
+
+        return pizzas
+    }
+
     override fun getById(id: Long): Pizza {
         val db = helper.readableDatabase
         var pizza = Pizza()
@@ -88,12 +123,12 @@ class PizzaDao private constructor(
 
         with(cursor) {
             if (count > 0) {
-                val id = getColumnIndexOrThrow(FIELD_ID).toLong()
-                val size = getColumnIndexOrThrow(FIELD_SIZE).toString()
-                val flavors = getColumnIndexOrThrow(FIELD_FLAVORS).toString()
-                val edge = getColumnIndexOrThrow(FIELD_EDGE)
-                val price = getColumnIndexOrThrow(FIELD_PRICE).toDouble()
-                val orderId = getColumnIndexOrThrow(FIELD_ORDER_ID).toLong()
+                val id = getLong(getColumnIndexOrThrow(FIELD_ID))
+                val size = getString(getColumnIndexOrThrow(FIELD_SIZE))
+                val flavors = getString(getColumnIndexOrThrow(FIELD_FLAVORS))
+                val edge = getInt(getColumnIndexOrThrow(FIELD_EDGE))
+                val price = getDouble(getColumnIndexOrThrow(FIELD_PRICE))
+                val orderId = getLong(getColumnIndexOrThrow(FIELD_ORDER_ID))
 
                 val withEdge = edge != 0
 
