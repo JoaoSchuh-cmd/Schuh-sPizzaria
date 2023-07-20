@@ -23,17 +23,6 @@ class FinishOrderActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFinishOrderBinding
     private lateinit var adapter : PizzaAdapter
 
-    private val addPizzaForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            result.data?.let {
-                    intent ->
-                Toast.makeText(this, "Pizza adicionada com sucesso!!!", Toast.LENGTH_LONG).show()
-                adapter.notifyDataSetChanged()
-            }
-            adapter.notifyDataSetChanged()
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFinishOrderBinding.inflate(layoutInflater)
@@ -76,8 +65,6 @@ class FinishOrderActivity : AppCompatActivity() {
             Intent(this, OrderActivity::class.java).run {
                 startActivity(this)
             }
-            //val finishOrderIntent = Intent(this, FinishOrderActivity::class.java)
-            //addPizzaForResult.launch(finishOrderIntent)
             finish()
         }
     }
@@ -88,20 +75,20 @@ class FinishOrderActivity : AppCompatActivity() {
             Intent(this, HomeActivity::class.java).run {
                 setResult(RESULT_OK, this)
             }
+            Toast.makeText(this, "Pedido adicionado com sucesso!!!", Toast.LENGTH_LONG).show()
             finish()
         }
     }
 
     private fun configureBtCancel() {
-        PriceCalculator.clearPrices()
-
         binding.btCancel.setOnClickListener {
             Functions.showConfirmationDialog(this, "Tem certeza de que deseja cancelar o pedido? \n Você voltará para a página inicial!")
                 .thenAccept { result ->
                     if (result) {
                         OrderDataStore.clearOrder()
-
                         setResult(RESULT_CANCELED)
+                        Toast.makeText(this, "Pedido cancelado!!!", Toast.LENGTH_LONG).show()
+                        PriceCalculator.clearPrices()
                         finish()
                     }
                 }
@@ -122,9 +109,6 @@ class FinishOrderActivity : AppCompatActivity() {
                 pizzas = OrderDataStore.getOrderPizzas()
             else {
                 pizzas = PizzaDao.getInstance(this@FinishOrderActivity).getAllPizzaFromOrderId(orderId)
-                //for (pizza in pizzas) {
-                //    if pizza
-                //}
             }
 
             adapter = PizzaAdapter(pizzas).apply {
