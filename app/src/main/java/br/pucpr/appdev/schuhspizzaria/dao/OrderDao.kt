@@ -167,14 +167,14 @@ class OrderDao private constructor(
         try {
             count = db.delete(
                 tableName,
-                "FIELD_ID = ?",
-                arrayOf(FIELD_ID) 
+                "${FIELD_ID} = ?",
+                arrayOf(order.id.toString())
             )
             db.setTransactionSuccessful()
         } catch (e : Exception) {
             Log.d("SchuzinsPizzaria:OrderDAO", e.localizedMessage)
         } finally {
-            db.beginTransaction()
+            db.endTransaction()
         }
         
         return count.toLong()

@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import br.pucpr.appdev.schuhspizzaria.dao.OrderDao
 import br.pucpr.appdev.schuhspizzaria.databinding.ActivityHomeBinding
 import br.pucpr.appdev.schuhspizzaria.datastore.OrderDataStore
@@ -36,6 +37,7 @@ class HomeActivity : AppCompatActivity() {
         configureGesture()
         configureBtAddOrder()
         configureBtFinishedOrders()
+        configureRecyclerViewEvents()
     }
 
     private fun configureBtAddOrder() {
@@ -83,14 +85,28 @@ class HomeActivity : AppCompatActivity() {
                         setMessage("Tem certeza que deseja excluir o pedido ${order.id}?")
                         setPositiveButton("Excluir") { _, _ ->
                             OrderDao.getInstance(this@HomeActivity).remove(order)
-                            Toast.makeText(this@HomeActivity, "Ordem ${order.id} removida com sucesso!!!", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@HomeActivity, "Ordem ${order.id}# removida com sucesso!!!", Toast.LENGTH_LONG).show()
                             adapter.notifyDataSetChanged()
+                            loadRecycleView()
                         }
                         setNegativeButton("Cancelar", null)
                         show()
                     }
                 }
             }
+        })
+    }
+
+    private fun configureRecyclerViewEvents() {
+        binding.rvOrders.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                rv.findChildViewUnder(e.x, e.y).apply {
+                    return (this != null && gesture.onTouchEvent(e))
+                }
+            }
+
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
         })
     }
 
