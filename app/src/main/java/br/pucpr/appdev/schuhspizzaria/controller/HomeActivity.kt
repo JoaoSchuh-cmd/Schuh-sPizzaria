@@ -65,11 +65,6 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        gesture.onTouchEvent(event)
-        return super.onTouchEvent(event)
-    }
-
     private fun configureGesture() {
 
         gesture = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {

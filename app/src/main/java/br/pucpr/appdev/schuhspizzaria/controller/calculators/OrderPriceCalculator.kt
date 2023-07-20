@@ -6,4 +6,8 @@ object OrderPriceCalculator {
     fun incOrderPrice(value : Double) {
         price += value
     }
+
+    fun decOrderPrice(value : Double) {
+        price -= value
+    }
 }
