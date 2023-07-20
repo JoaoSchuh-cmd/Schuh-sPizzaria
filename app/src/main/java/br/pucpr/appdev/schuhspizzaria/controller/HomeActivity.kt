@@ -21,11 +21,10 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var gesture: GestureDetector
 
     private val addOrderForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        //if (result.resultCode == RESULT_OK) {
-        //
-        //    adapter.notifyDataSetChanged()
-        //    loadRecycleView()
-        //}
+        if (result.resultCode == RESULT_OK) {
+            adapter.notifyDataSetChanged()
+            loadRecycleView()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,10 +41,8 @@ class HomeActivity : AppCompatActivity() {
     private fun configureBtAddOrder() {
         binding.btAddOrder.setOnClickListener {
             Intent(this, OrderActivity::class.java).run {
-                //addOrderForResult.launch(this)
-                startActivity(this)
+                addOrderForResult.launch(this)
             }
-            loadRecycleView()
         }
     }
 
