@@ -51,7 +51,6 @@
                         android:text="Pequena"
                         android:textSize="20sp"
                         android:textStyle="bold|italic"
-                        android:checked="true"
                         android:buttonTint="@color/dark_red"/>
 
                     <RadioButton
@@ -117,6 +116,7 @@
                 </RadioGroup>
 
                 <TextView
+                    android:id="@+id/tvFlavorCountText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/selecione_qtd_sabores_text"

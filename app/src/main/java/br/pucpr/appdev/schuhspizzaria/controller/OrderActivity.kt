@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.CheckBox
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import br.pucpr.appdev.schuhspizzaria.databinding.ActivityOrderBinding
 import br.pucpr.appdev.schuhspizzaria.model.Pizza
@@ -24,27 +26,79 @@ import br.pucpr.appdev.schuhspizzaria.model.Order
 class OrderActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityOrderBinding
+    private var maxFlavorCount : Int = 0
+    private var flavorCount : Int = 0
+    private var lastCheckedId : Int = -1
+
+    private val flavorsCbOnClickListener = { checkBox : CheckBox ->
+        if (checkBox.isChecked)
+            flavorCount += 1
+        else
+            if (flavorCount > 0) flavorCount -= 1
+
+        if (flavorCount > maxFlavorCount) {
+            checkBox.isChecked = false
+            flavorCount -= 1
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOrderBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        configureRgPizzaSizeClick()
+        configureFlavorsCbCheck()
         configureBtSave()
         configureBtCancel()
         loadDataFromOuter()
     }
 
-    fun configureBtSave() {
-        binding.btSave.setOnClickListener {
-            addOrEditPizzaToOrder()
+    private fun configureFlavorsCbCheck() {
+        binding.cbChicken.setOnClickListener { flavorsCbOnClickListener(it as CheckBox) }
+        binding.cbPepperoni.setOnClickListener { flavorsCbOnClickListener(it as CheckBox) }
+        binding.cbPortuguese.setOnClickListener { flavorsCbOnClickListener(it as CheckBox) }
+        binding.cbStrogonoff.setOnClickListener { flavorsCbOnClickListener(it as CheckBox) }
+        binding.cbChickenWithCatupiry.setOnClickListener { flavorsCbOnClickListener(it as CheckBox) }
+    }
 
-            Intent(this, FinishOrderActivity::class.java).run {
-                setResult(RESULT_OK)
-                startActivity(this)
+    fun configureRgPizzaSizeClick() {
+        binding.rgPizzaSize.setOnCheckedChangeListener { radiouGroup, checkedId ->
+            var x = ""
+            when (checkedId) {
+                binding.rbSmallSize.id -> x = "2"
+                binding.rbMediumSize.id -> x = "3"
+                binding.rbLargeSize.id -> x = "4"
             }
 
-            finish()
+            if (flavorCount > x.toInt()) {
+                Toast.makeText(this, "Por favor, deixe apenas $x sabores para alterar para esse tamanho!", Toast.LENGTH_LONG).show()
+                binding.rgPizzaSize.check(lastCheckedId)
+            } else {
+                maxFlavorCount = x.toInt()
+
+                binding.tvFlavorCountText.setText("Selecione até $x sabores")
+
+                lastCheckedId = checkedId
+            }
+        }
+
+        binding.rgPizzaSize.check(binding.rbSmallSize.id) // Just to execute de Change Event
+    }
+    fun configureBtSave() {
+        binding.btSave.setOnClickListener {
+            if (flavorCount == 0) {
+                Toast.makeText(this, "Selecione pelo menos um sabor", Toast.LENGTH_LONG).show()
+            } else {
+                addOrEditPizzaToOrder()
+
+                Intent(this, FinishOrderActivity::class.java).run {
+                    setResult(RESULT_OK)
+                    startActivity(this)
+                }
+
+                finish()
+            }
         }
     }
 
@@ -167,10 +221,14 @@ class OrderActivity : AppCompatActivity() {
         val flavorsList = flavors.split("|")
 
         if (flavorsList.isNotEmpty())
-            for (flavor in flavorsList)
+            for (flavor in flavorsList) {
                 checkFlavor(flavor)
-        else
+                flavorCount += 1
+            }
+        else {
             checkFlavor(flavors)
+            flavorCount += 1
+        }
     }
 
     private fun checkFlavor(flavor : String) {
