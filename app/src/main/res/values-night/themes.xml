@@ -2,6 +2,6 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.SchuhsPizzaria" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <item name="colorPrimary">@color/cream</item>
+        <item name="colorPrimary">@color/black</item>
     </style>
 </resources>
