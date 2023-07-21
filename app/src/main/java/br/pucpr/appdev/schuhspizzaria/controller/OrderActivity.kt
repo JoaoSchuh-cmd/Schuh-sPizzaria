@@ -237,7 +237,7 @@ class OrderActivity : AppCompatActivity() {
             "Frango com Catupiri" -> binding.cbChickenWithCatupiry.isChecked = true
             "Calabresa" -> binding.cbPepperoni.isChecked = true
             "Portuguesa" -> binding.cbPortuguese.isChecked = true
-            "Strononoff" -> binding.cbStrogonoff.isChecked = true
+            "Stroganoff" -> binding.cbStrogonoff.isChecked = true
         }
     }
 }

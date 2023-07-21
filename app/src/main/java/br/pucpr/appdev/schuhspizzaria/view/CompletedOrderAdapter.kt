@@ -29,23 +29,8 @@ class CompletedOrderAdapter(var orders: MutableList<Order>) : RecyclerView.Adapt
             holder.binding.tvTotalOrderPrice.text = this.price.toString()
         }
 
-        val context = holder.itemView.context
-
-        //val orders = OrderDao.getInstance(context).getAllCompletedOrders()
-
-        //val order = orders[position]
-
-        holder.binding.btOrderAgain.setOnClickListener {
-            val intent = Intent(context, FinishOrderActivity::class.java).run {
-                putExtra("orderId", orders[position].id)
-            }
-            (context as AppCompatActivity).startActivity(intent)
-            context.finish()
-        }
+        configureBtOrderAgain(holder, position)
     }
-
-        //configureBtOrderAgain(holder, position)
-    //}
 
     override fun getItemCount() = orders.size
 
@@ -54,13 +39,9 @@ class CompletedOrderAdapter(var orders: MutableList<Order>) : RecyclerView.Adapt
     fun configureBtOrderAgain(holder: CompletedOrderHolder, position: Int) {
         val context = holder.itemView.context
 
-        val orders = OrderDao.getInstance(context).getAllCompletedOrders()
-
-        val order = orders[position]
-
         holder.binding.btOrderAgain.setOnClickListener {
             val intent = Intent(context, FinishOrderActivity::class.java).run {
-                putExtra("orderId", order.id)
+                putExtra("orderId", orders[position].id)
             }
             (context as AppCompatActivity).startActivity(intent)
             context.finish()

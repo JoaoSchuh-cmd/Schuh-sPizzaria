@@ -21,14 +21,22 @@ class PizzaAdapter(var pizzas: MutableList<Pizza>) : RecyclerView.Adapter<PizzaA
     }
 
     override fun onBindViewHolder(holder: PizzaHolder, position: Int) {
-        val context = holder.itemView.context
-
         pizzas[position].apply {
             holder.binding.tvSize.text = this.size
             holder.binding.tvFlavors.text = this.flavors
             holder.binding.tvEdge.text = if (this.withEdge) "Sim" else "Não"
             holder.binding.tvTotalPizzaPrice.text = this.price.toString()
         }
+
+        configureBtEditPizza(holder, position)
+    }
+
+    override fun getItemCount() = pizzas.size
+
+    inner class PizzaHolder(var binding: ItemPizzasBinding) : RecyclerView.ViewHolder(binding.root)
+
+    fun configureBtEditPizza(holder: PizzaHolder, position: Int) {
+        val context = holder.itemView.context
 
         holder.binding.btEditPizza.setOnClickListener {
             val intent = Intent(context, OrderActivity::class.java).run {
@@ -39,27 +47,5 @@ class PizzaAdapter(var pizzas: MutableList<Pizza>) : RecyclerView.Adapter<PizzaA
             (context as AppCompatActivity).startActivity(intent)
             context.finish()
         }
-
-        //configureBtEditPizza(holder, position)
-    }
-
-    override fun getItemCount() = pizzas.size
-
-    inner class PizzaHolder(var binding: ItemPizzasBinding) : RecyclerView.ViewHolder(binding.root)
-
-    fun configureBtEditPizza(holder: PizzaHolder, position: Int) {
-//        val context = holder.itemView.context
-//
-//        val pizzas = PizzaDao.getInstance(context).
-//
-//        val pizza = OrderDataStore.getOrderByPosition(position)
-//
-//        holder.binding.btEditPizza.setOnClickListener {
-//            val intent = Intent(context, OrderActivity::class.java).run {
-//                putExtra("order", order.id)
-//            }
-//            (context as AppCompatActivity).startActivity(intent)
-//            context.finish()
-//        }
     }
 }
