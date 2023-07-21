@@ -140,12 +140,12 @@ class OrderActivity : AppCompatActivity() {
 
         val flavors = flavorsBuild() // Aqui ja calcula o preço pelos sabores também
 
-        PizzaPriceCalculator.calculateByEdge(withEdge)
-        PizzaPriceCalculator.calculateBySize(size)
+        PriceCalculator.calculatePizzaByEdge(withEdge)
+        PriceCalculator.calculatePizzaBySize(size)
 
         val price = PriceCalculator.getPizzaPrice()
 
-        OrderPriceCalculator.incOrderPrice(price)
+        PriceCalculator.incOrderPrice(price)
 
         return Pizza(size, flavors, withEdge, price,getLastOrderId() + 1)
     }
@@ -175,7 +175,7 @@ class OrderActivity : AppCompatActivity() {
             count += 1
         }
 
-        PizzaPriceCalculator.calculateByFlavors(count)
+        PriceCalculator.calculatePizzaByFlavors(count)
 
         return flavorBuilder.build()
     }
@@ -199,6 +199,7 @@ class OrderActivity : AppCompatActivity() {
             loadSize(pizza.size)
             loadWithEdge(pizza.withEdge)
             loadFlavors(pizza.flavors)
+            PriceCalculator.decOrderPrice(pizza.price)
         }
     }
 

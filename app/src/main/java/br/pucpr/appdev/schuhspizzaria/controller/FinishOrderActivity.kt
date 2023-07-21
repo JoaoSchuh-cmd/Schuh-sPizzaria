@@ -139,7 +139,7 @@ class FinishOrderActivity : AppCompatActivity() {
                     AlertDialog.Builder(this@FinishOrderActivity).apply {
                         setMessage("Tem certeza que deseja remover a pizza do pedido?")
                         setPositiveButton("Remover") { _, _ ->
-                            OrderPriceCalculator.decOrderPrice(pizza.price)
+                            PriceCalculator.decOrderPrice(pizza.price)
                             OrderDataStore.removePizza(pizza)
                             Toast.makeText(this@FinishOrderActivity, "Pizza removida com sucesso!!!", Toast.LENGTH_LONG).show()
                             adapter.notifyDataSetChanged()
