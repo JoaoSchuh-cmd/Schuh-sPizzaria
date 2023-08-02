@@ -122,7 +122,7 @@ class PizzaDao private constructor(
         )
 
         with(cursor) {
-            if (count > 0) {
+            if (moveToFirst()) {
                 val id = getLong(getColumnIndexOrThrow(FIELD_ID))
                 val size = getString(getColumnIndexOrThrow(FIELD_SIZE))
                 val flavors = getString(getColumnIndexOrThrow(FIELD_FLAVORS))

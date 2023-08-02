@@ -49,7 +49,7 @@ class OrderActivity : AppCompatActivity() {
 
         configureRgPizzaSizeClick()
         configureFlavorsCbCheck()
-        configureBtSave()
+        configureBtNext()
         configureBtCancel()
         loadDataFromOuter()
     }
@@ -85,8 +85,8 @@ class OrderActivity : AppCompatActivity() {
 
         binding.rgPizzaSize.check(binding.rbSmallSize.id) // Just to execute de Change Event
     }
-    fun configureBtSave() {
-        binding.btSave.setOnClickListener {
+    fun configureBtNext() {
+        binding.btNext.setOnClickListener {
             if (flavorCount == 0) {
                 Toast.makeText(this, "Selecione pelo menos um sabor", Toast.LENGTH_LONG).show()
             } else {

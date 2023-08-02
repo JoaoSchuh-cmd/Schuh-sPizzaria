@@ -155,7 +155,7 @@
                     android:id="@+id/cbStrogonoff"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Strogonoff"
+                    android:text="Stroganoff"
                     android:textSize="20sp"
                     android:textStyle="bold|italic"/>
 
@@ -183,7 +183,7 @@
                 android:layout_marginRight="10dp"/>
 
             <Button
-                android:id="@+id/btSave"
+                android:id="@+id/btNext"
                 android:layout_width="150dp"
                 android:layout_height="60dp"
                 android:text="Avançar"

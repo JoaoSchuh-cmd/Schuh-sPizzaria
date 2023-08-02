@@ -33,11 +33,11 @@ class SQLiteDataHelper(context: Context) :
                 ")"
 
         private const val insertOrderSQL = "INSERT INTO $TABLE_ORDERS (DATE, PRICE, STATUS) VALUES" +
-                "('15/07/2023', 90.00, 0)"
+                "('15/07/2023', 120.00, 0)"
 
         private const val insertPizzaSQL = "INSERT INTO $TABLE_PIZZAS (SIZE, FLAVORS, EDGE, PRICE, ORDER_ID) VALUES" +
-                "('GRANDE', 'Flango|Calapresa|Estrágunoss', 1, 45.00, 1)," +
-                "('GRANDE', 'Flango|Calapresa|Dos Colonizadores', 1, 45.00, 1)"
+                "('GRANDE', 'Frango|Calabresa|Stroganoff', 1, 60.00, 1)," +
+                "('GRANDE', 'Frango|Calabresa|Portuguesa', 1, 60.00, 1)"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {

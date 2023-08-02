@@ -82,6 +82,7 @@ class FinishOrderActivity : AppCompatActivity() {
             finishOrderBuilding()
             Intent(this, HomeActivity::class.java).run {
                 setResult(RESULT_OK, this)
+                startActivity(this)
             }
             Toast.makeText(this, "Pedido adicionado com sucesso!!!", Toast.LENGTH_LONG).show()
             finish()
@@ -113,17 +114,27 @@ class FinishOrderActivity : AppCompatActivity() {
 
             var pizzas : MutableList<Pizza>
 
-            if (orderId.toInt() == -1)
-                pizzas = OrderDataStore.getOrderPizzas()
-            else {
-                pizzas = PizzaDao.getInstance(this@FinishOrderActivity).getAllPizzaFromOrderId(orderId)
-            }
+            if (orderId.toInt() != -1)
+                loadFromOuter(PizzaDao.getInstance(this@FinishOrderActivity).getAllPizzaFromOrderId(orderId))
+
+            pizzas = OrderDataStore.getOrderPizzas()
 
             adapter = PizzaAdapter(pizzas).apply {
                 binding.rvOrderPizzasList.adapter = this
             }
         }
     }
+
+    private fun loadFromOuter(pizzas : MutableList<Pizza>) {
+        for (pizza in pizzas) {
+            pizza.orderId = OrderDao.getInstance(this).getLastId() + 1
+            OrderDataStore.addPizza(pizza)
+            PriceCalculator.incOrderPrice(pizza.price)
+        }
+
+        intent.removeExtra("orderId")
+    }
+
 
     private fun configureGesture() {
 

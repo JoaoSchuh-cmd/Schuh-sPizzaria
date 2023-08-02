@@ -50,8 +50,10 @@ class HomeActivity : AppCompatActivity() {
 
     private fun configureBtFinishedOrders() {
         binding.btFinishedOrders.setOnClickListener {
-            val intent = Intent(this, CompletedOrdersActivity::class.java)
-            startActivity(intent)
+            Intent(this, CompletedOrdersActivity::class.java).run {
+                startActivity(this)
+            }
+            finish()
         }
     }
 
