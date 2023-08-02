@@ -24,7 +24,6 @@ class HomeActivity : AppCompatActivity() {
     private val addOrderForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             adapter.notifyDataSetChanged()
-            loadRecycleView()
         }
     }
 

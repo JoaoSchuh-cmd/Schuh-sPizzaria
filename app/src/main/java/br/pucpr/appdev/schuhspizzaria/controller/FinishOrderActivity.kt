@@ -29,6 +29,12 @@ class FinishOrderActivity : AppCompatActivity() {
     private lateinit var adapter : PizzaAdapter
     private lateinit var gesture: GestureDetector
 
+    private val addPizzaForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            adapter.notifyDataSetChanged()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFinishOrderBinding.inflate(layoutInflater)
@@ -71,9 +77,8 @@ class FinishOrderActivity : AppCompatActivity() {
     private fun configureBtAddPizza() {
         binding.btAddPizza.setOnClickListener {
             Intent(this, OrderActivity::class.java).run {
-                startActivity(this)
+                addPizzaForResult.launch(this)
             }
-            finish()
         }
     }
 
