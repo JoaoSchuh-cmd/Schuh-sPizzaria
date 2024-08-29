@@ -1,11 +1,13 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'jacoco'
 }
+
 
 android {
     namespace 'br.pucpr.appdev.schuhspizzaria'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "br.pucpr.appdev.schuhspizzaria"
@@ -35,6 +37,31 @@ android {
     }
 }
 
+tasks.withType(Test) {
+    // Ensure JaCoCo generates coverage reports
+    finalizedBy 'jacocoTestReport'
+}
+
+task jacocoTestReport(type: JacocoReport) {
+    dependsOn 'testDebugUnitTest' // Use the correct test task name
+
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    // Source directories to include
+    sourceDirectories.setFrom(files(["src/main/java"]))
+
+    // Class directories to include
+    classDirectories.setFrom(fileTree(dir: "build/tmp/kotlin-classes/debug", includes: ["**/*.class"]))
+
+    // Execution data file path
+    executionData.setFrom(fileTree(dir: "build", includes: ["jacoco/testDebugUnitTest.exec"]))
+}
+jacoco {
+    toolVersion = '0.8.8' // Update to the latest stable version if available
+}
 dependencies {
 
     implementation 'com.redmadrobot:input-mask-android:7.2.6'
